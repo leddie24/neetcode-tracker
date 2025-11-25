@@ -7,15 +7,14 @@ import {
   ExportImportControls,
 } from "../components";
 import { problems } from "../data";
-
-
+import { ProgressState, ProblemProgress } from "../types";
 
 // --- Spaced repetition intervals ---
 const intervals = [1, 3, 7, 14, 30];
 
 const NeetCodeTracker = () => {
   // --- Local state with localStorage ---
-  const [progress, setProgress] = useState(() => {
+  const [progress, setProgress] = useState<ProgressState>(() => {
     try {
       const savedProgress = localStorage.getItem("neetcode-progress");
       return savedProgress ? JSON.parse(savedProgress) : {};
@@ -40,23 +39,34 @@ const NeetCodeTracker = () => {
   }, [progress]);
 
   // --- Helpers ---
-  const today = new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${String(now.getDate()).padStart(2, "0")}`;
 
-  const calculateNextReviews = (solvedDate) => {
+  const calculateNextReviews = (solvedDate: string | null): string[] => {
     if (!solvedDate) return [];
-    const date = new Date(solvedDate);
-    return intervals.map(
-      (days) =>
-        new Date(date.getTime() + days * 24 * 60 * 60 * 1000)
-          .toISOString()
-          .split("T")[0]
-    );
+    const date = new Date(solvedDate + "T00:00:00");
+    return intervals.map((days) => {
+      const reviewDate = new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
+      return `${reviewDate.getFullYear()}-${String(
+        reviewDate.getMonth() + 1
+      ).padStart(2, "0")}-${String(reviewDate.getDate()).padStart(2, "0")}`;
+    });
   };
 
-  const toggleComplete = (problemId, reviewIndex = null) => {
-    const todayStr = new Date().toISOString().split("T")[0];
+  const toggleComplete = (
+    problemId: number,
+    reviewIndex: number | null = null
+  ) => {
+    // Use local date instead of UTC to avoid timezone issues
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(
+      now.getMonth() + 1
+    ).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     setProgress((prev) => {
-      const current = prev[problemId] || {
+      const current: ProblemProgress = prev[problemId] || {
         solved: false,
         reviews: Array(5).fill(false),
         dates: {},
@@ -78,10 +88,11 @@ const NeetCodeTracker = () => {
         const newReviews = [...current.reviews];
         newReviews[reviewIndex] = !newReviews[reviewIndex];
         const newDates = { ...current.dates };
+        const reviewKey = `review${reviewIndex + 1}` as keyof typeof newDates;
         if (newReviews[reviewIndex]) {
-          newDates[`review${reviewIndex + 1}`] = todayStr;
+          newDates[reviewKey] = todayStr;
         } else {
-          delete newDates[`review${reviewIndex + 1}`];
+          delete newDates[reviewKey];
         }
         return {
           ...prev,
@@ -93,7 +104,7 @@ const NeetCodeTracker = () => {
 
   const categories = [
     "All",
-    ...Array.from(new Set(problems.map((p) => p.category))),
+    ...Array.from(new Set(problems.map((p: any) => p.category))),
   ];
   const difficulties = ["All", "Easy", "Medium", "Hard"];
 
@@ -101,18 +112,18 @@ const NeetCodeTracker = () => {
     total: problems.length,
     solved: Object.values(progress).filter((p) => p.solved).length,
     easy: problems.filter(
-      (p) => p.difficulty === "Easy" && progress[p.id]?.solved
+      (p: any) => p.difficulty === "Easy" && progress[p.id]?.solved
     ).length,
     medium: problems.filter(
-      (p) => p.difficulty === "Medium" && progress[p.id]?.solved
+      (p: any) => p.difficulty === "Medium" && progress[p.id]?.solved
     ).length,
     hard: problems.filter(
-      (p) => p.difficulty === "Hard" && progress[p.id]?.solved
+      (p: any) => p.difficulty === "Hard" && progress[p.id]?.solved
     ).length,
   };
 
   const getDueProblems = () => {
-    return problems.filter((problem) => {
+    return problems.filter((problem: any) => {
       const prob = progress[problem.id];
       if (!prob || !prob.solved) return false;
       const nextReviews = calculateNextReviews(prob.solvedDate);

@@ -1,6 +1,7 @@
 import { CheckCircle2, Circle, Calendar, ExternalLink } from "lucide-react";
+import { ProblemTableProps, Problem } from "../types";
 
-const difficultyColor = {
+const difficultyColor: Record<Problem["difficulty"], string> = {
   Easy: "text-green-600",
   Medium: "text-yellow-600",
   Hard: "text-red-600",
@@ -14,8 +15,12 @@ const ProblemTable = ({
   filterCategory,
   filterDifficulty,
   showOnlyDueToday,
-}) => {
-  const today = new Date().toISOString().split("T")[0];
+}: ProblemTableProps) => {
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${String(now.getDate()).padStart(2, "0")}`;
 
   const filteredProblems = problems.filter((problem) => {
     const categoryMatch =
@@ -34,19 +39,19 @@ const ProblemTable = ({
     return categoryMatch && difficultyMatch && isDueToday;
   });
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString + "T00:00:00");
     return date.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
     });
   };
 
-  const isOverdue = (date) => {
+  const isOverdue = (date: string) => {
     return date < today;
   };
 
-  const isDueToday = (date) => {
+  const isDueToday = (date: string) => {
     return date === today;
   };
 
@@ -112,7 +117,19 @@ const ProblemTable = ({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
-                      onClick={() => toggleComplete(problem.id)}
+                      onClick={() => {
+                        if (prob.solved) {
+                          if (
+                            window.confirm(
+                              "Are you sure you want to mark this problem as unsolved? This will clear all review progress."
+                            )
+                          ) {
+                            toggleComplete(problem.id);
+                          }
+                        } else {
+                          toggleComplete(problem.id);
+                        }
+                      }}
                       className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
                     >
                       {prob.solved ? (

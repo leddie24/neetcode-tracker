@@ -1,6 +1,10 @@
 import { Download, Upload, Trash2 } from "lucide-react";
+import { ExportImportControlsProps } from "../types";
 
-const ExportImportControls = ({ progress, setProgress }) => {
+const ExportImportControls = ({
+  progress,
+  setProgress,
+}: ExportImportControlsProps) => {
   const exportData = () => {
     const dataStr = JSON.stringify(progress, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
@@ -13,13 +17,13 @@ const ExportImportControls = ({ progress, setProgress }) => {
     link.click();
   };
 
-  const importData = (event) => {
+  const importData = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
-          const imported = JSON.parse(e.target.result);
+          const imported = JSON.parse(e.target?.result as string);
           setProgress(imported);
           alert("Progress imported successfully!");
         } catch {

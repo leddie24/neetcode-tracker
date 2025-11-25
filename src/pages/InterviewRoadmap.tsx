@@ -12,8 +12,9 @@ import {
   Rocket,
 } from "lucide-react";
 import { interviewRoadmap, dsaMindmap } from "../data";
+import type { LucideIcon } from "lucide-react";
 
-const iconMap = {
+const iconMap: Record<string, LucideIcon> = {
   Briefcase,
   Code,
   MessageSquare,
@@ -26,16 +27,20 @@ const iconMap = {
 };
 
 const InterviewRoadmap = () => {
-  const [expandedSections, setExpandedSections] = useState({});
-  const [completedItems, setCompletedItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem("interview-progress");
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >({});
+  const [completedItems, setCompletedItems] = useState<Record<string, boolean>>(
+    () => {
+      try {
+        const saved = localStorage.getItem("interview-progress");
+        return saved ? JSON.parse(saved) : {};
+      } catch {
+        return {};
+      }
     }
-  });
-  const [activeTab, setActiveTab] = useState("interview");
+  );
+  const [activeTab, setActiveTab] = useState<"interview" | "dsa">("interview");
 
   useEffect(() => {
     try {
@@ -48,16 +53,15 @@ const InterviewRoadmap = () => {
     }
   }, [completedItems]);
 
-
-  const toggleSection = (id) => {
+  const toggleSection = (id: string) => {
     setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const toggleComplete = (id) => {
+  const toggleComplete = (id: string) => {
     setCompletedItems((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const getProgress = (sectionId) => {
+  const getProgress = (sectionId: string): number => {
     const section = interviewRoadmap.find((s) => s.id === sectionId);
     if (!section) return 0;
     const completed = section.items.filter(

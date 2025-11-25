@@ -1,4 +1,5 @@
 import { Filter } from "lucide-react";
+import { FiltersProps } from "../types";
 
 const Filters = ({
   categories,
@@ -9,7 +10,7 @@ const Filters = ({
   setFilterDifficulty,
   showOnlyDueToday,
   setShowOnlyDueToday,
-}) => (
+}: FiltersProps) => (
   <div className="bg-white rounded-lg shadow-lg p-6 mb-6 transition-colors">
     <div className="flex items-center gap-2 mb-4">
       <Filter size={20} className="text-gray-600" />
@@ -56,7 +57,7 @@ const Filters = ({
           type="checkbox"
           title="Show Only Due Today"
           checked={showOnlyDueToday}
-          onChange={() => setShowOnlyDueToday((prev) => !prev)}
+          onChange={() => setShowOnlyDueToday(!showOnlyDueToday)}
           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded bg-white"
         />
         <label className="text-sm font-medium text-gray-700">
