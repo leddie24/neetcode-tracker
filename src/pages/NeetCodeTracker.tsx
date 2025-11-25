@@ -104,7 +104,7 @@ const NeetCodeTracker = () => {
 
   const categories = [
     "All",
-    ...Array.from(new Set(problems.map((p: any) => p.category))),
+    ...Array.from(new Set(problems.map((p) => p.category))),
   ];
   const difficulties = ["All", "Easy", "Medium", "Hard"];
 
@@ -112,18 +112,18 @@ const NeetCodeTracker = () => {
     total: problems.length,
     solved: Object.values(progress).filter((p) => p.solved).length,
     easy: problems.filter(
-      (p: any) => p.difficulty === "Easy" && progress[p.id]?.solved
+      (p) => p.difficulty === "Easy" && progress[p.id]?.solved
     ).length,
     medium: problems.filter(
-      (p: any) => p.difficulty === "Medium" && progress[p.id]?.solved
+      (p) => p.difficulty === "Medium" && progress[p.id]?.solved
     ).length,
     hard: problems.filter(
-      (p: any) => p.difficulty === "Hard" && progress[p.id]?.solved
+      (p) => p.difficulty === "Hard" && progress[p.id]?.solved
     ).length,
   };
 
   const getDueProblems = () => {
-    return problems.filter((problem: any) => {
+    return problems.filter((problem) => {
       const prob = progress[problem.id];
       if (!prob || !prob.solved) return false;
       const nextReviews = calculateNextReviews(prob.solvedDate);
