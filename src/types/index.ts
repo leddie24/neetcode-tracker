@@ -7,6 +7,7 @@ export interface Problem {
   day: number;
   url: string;
   leetcodeUrl?: string;
+  notes?: string;
 }
 
 // Progress tracking

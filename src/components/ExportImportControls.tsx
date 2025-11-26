@@ -1,5 +1,6 @@
 import { Download, Upload, Trash2 } from "lucide-react";
 import { ExportImportControlsProps } from "../types";
+import { problems } from "../data";
 
 const ExportImportControls = ({
   progress,
@@ -11,7 +12,19 @@ const ExportImportControls = ({
       2,
       "0"
     )}-${String(now.getDate()).padStart(2, "0")}`;
-    const dataStr = JSON.stringify(progress, null, 2);
+    
+    // Include problems with their notes in the export
+    const exportContent = {
+      progress,
+      problems: problems.map((p) => ({
+        id: p.id,
+        name: p.name,
+        notes: p.notes,
+      })),
+      exportDate: dateStr,
+    };
+    
+    const dataStr = JSON.stringify(exportContent, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -27,7 +40,24 @@ const ExportImportControls = ({
       reader.onload = (e) => {
         try {
           const imported = JSON.parse(e.target?.result as string);
-          setProgress(imported);
+          
+          // Handle both old format (just progress) and new format (progress + problems)
+          if (imported.progress && imported.problems) {
+            // New format with notes
+            setProgress(imported.progress);
+            // Update problems with imported notes
+            imported.problems.forEach(
+              (importedProblem: { id: number; notes?: string }) => {
+                const problem = problems.find((p) => p.id === importedProblem.id);
+                if (problem && importedProblem.notes) {
+                  problem.notes = importedProblem.notes;
+                }
+              }
+            );
+          } else {
+            // Old format - just progress
+            setProgress(imported);
+          }
           alert("Progress imported successfully!");
         } catch {
           alert("Error importing file. Please check the file format.");

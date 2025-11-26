@@ -1,5 +1,7 @@
-import { CheckCircle2, Circle, Calendar, ExternalLink } from "lucide-react";
+import { CheckCircle2, Circle, Calendar, ExternalLink, FileText } from "lucide-react";
+import { useState } from "react";
 import { ProblemTableProps, Problem } from "../types";
+import NotesModal from "./NotesModal";
 
 const difficultyColor: Record<Problem["difficulty"], string> = {
   Easy: "text-green-600",
@@ -16,6 +18,18 @@ const ProblemTable = ({
   filterDifficulty,
   showOnlyDueToday,
 }: ProblemTableProps) => {
+  const [notesModal, setNotesModal] = useState<{
+    isOpen: boolean;
+    problemId: number | null;
+    problemName: string;
+    notes: string | undefined;
+  }>({
+    isOpen: false,
+    problemId: null,
+    problemName: "",
+    notes: undefined,
+  });
+
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
     2,
@@ -79,6 +93,9 @@ const ProblemTable = ({
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Reviews & Due Dates
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Notes
               </th>
             </tr>
           </thead>
@@ -212,12 +229,57 @@ const ProblemTable = ({
                       </span>
                     )}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={() =>
+                        setNotesModal({
+                          isOpen: true,
+                          problemId: problem.id,
+                          problemName: problem.name,
+                          notes: problem.notes,
+                        })
+                      }
+                      className="flex items-center gap-2 text-gray-600 hover:text-blue-600"
+                      title="Add/View notes"
+                    >
+                      <FileText
+                        size={16}
+                        className={problem.notes ? "text-blue-600" : ""}
+                      />
+                      <span className="text-xs">
+                        {problem.notes ? "Edit Notes" : "Add Notes"}
+                      </span>
+                    </button>
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
+
+      <NotesModal
+        isOpen={notesModal.isOpen}
+        problemName={notesModal.problemName}
+        notes={notesModal.notes}
+        onClose={() =>
+          setNotesModal({
+            isOpen: false,
+            problemId: null,
+            problemName: "",
+            notes: undefined,
+          })
+        }
+        onSave={(notes) => {
+          // Update the problem notes in the data
+          const problemIndex = problems.findIndex(
+            (p) => p.id === notesModal.problemId
+          );
+          if (problemIndex !== -1) {
+            problems[problemIndex].notes = notes;
+          }
+        }}
+      />
     </div>
   );
 };
