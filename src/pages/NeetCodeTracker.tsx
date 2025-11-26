@@ -135,7 +135,7 @@ const NeetCodeTracker = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 transition-colors">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
