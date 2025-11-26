@@ -22,7 +22,10 @@ const renderPreview = (text: string): ReactNode[] => {
       if (codeBlock) {
         // End code block
         elements.push(
-          <pre key={key++} className="bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto my-2">
+          <pre
+            key={key++}
+            className="bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto my-2"
+          >
             <code className="font-mono text-sm">{codeContent.join("\n")}</code>
           </pre>
         );
@@ -81,6 +84,37 @@ const NotesModal = ({
     onClose();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const textarea = e.currentTarget;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      if (e.shiftKey) {
+        // Remove tab character before cursor (unindent)
+        if (editedNotes[start - 1] === "\t") {
+          const newText =
+            editedNotes.substring(0, start - 1) + editedNotes.substring(start);
+          setEditedNotes(newText);
+          setTimeout(() => {
+            textarea.selectionStart = textarea.selectionEnd = start - 1;
+          }, 0);
+        }
+      } else {
+        // Insert tab character at cursor position
+        const newText =
+          editedNotes.substring(0, start) + "\t" + editedNotes.substring(end);
+        setEditedNotes(newText);
+
+        // Move cursor after the inserted tab
+        setTimeout(() => {
+          textarea.selectionStart = textarea.selectionEnd = start + 1;
+        }, 0);
+      }
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col">
@@ -105,6 +139,7 @@ const NotesModal = ({
             <textarea
               value={editedNotes}
               onChange={(e) => setEditedNotes(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Add notes here...&#10;&#10;Supports:&#10;- Code blocks with triple backticks (```code```)&#10;- **Bold text**&#10;- Bullet points with -"
               className="flex-1 p-4 border border-gray-300 rounded-lg font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-0"
             />
@@ -119,7 +154,9 @@ const NotesModal = ({
               {editedNotes ? (
                 <div className="space-y-2">{renderPreview(editedNotes)}</div>
               ) : (
-                <p className="text-gray-400 italic">Preview will appear here...</p>
+                <p className="text-gray-400 italic">
+                  Preview will appear here...
+                </p>
               )}
             </div>
           </div>
