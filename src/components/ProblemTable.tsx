@@ -93,6 +93,7 @@ const ProblemTable = ({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     <div className="flex items-center gap-2">
+                      Neetcode:{" "}
                       <a
                         href={problem.url}
                         target="_blank"
@@ -104,6 +105,21 @@ const ProblemTable = ({
                         <ExternalLink size={14} className="flex-shrink-0" />
                       </a>
                     </div>
+                    {problem.leetcodeUrl && (
+                      <div className="flex items-center gap-2">
+                        Leetcode:{" "}
+                        <a
+                          href={problem.leetcodeUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
+                          title={`Open ${problem.name} on NeetCode`}
+                        >
+                          {problem.name}
+                          <ExternalLink size={14} className="flex-shrink-0" />
+                        </a>
+                      </div>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {problem.category}

@@ -6,6 +6,7 @@ export interface Problem {
   difficulty: "Easy" | "Medium" | "Hard";
   day: number;
   url: string;
+  leetcodeUrl?: string;
 }
 
 // Progress tracking
