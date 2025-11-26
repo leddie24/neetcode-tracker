@@ -6,14 +6,17 @@ const ExportImportControls = ({
   setProgress,
 }: ExportImportControlsProps) => {
   const exportData = () => {
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(now.getDate()).padStart(2, "0")}`;
     const dataStr = JSON.stringify(progress, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `neetcode-progress-${
-      new Date().toISOString().split("T")[0]
-    }.json`;
+    link.download = `neetcode-progress-${dateStr}.json`;
     link.click();
   };
 
