@@ -14,7 +14,6 @@ export interface Problem {
 export interface ProblemProgress {
   solved: boolean;
   solvedDate: string | null;
-  reviews: boolean[];
   dates: {
     initial?: string;
     review1?: string;
@@ -103,7 +102,11 @@ export interface ProblemTableProps {
   problems: Problem[];
   progress: ProgressState;
   toggleComplete: (problemId: number, reviewIndex?: number | null) => void;
-  calculateNextReviews: (solvedDate: string | null) => string[];
+  calculateNextReviews: (
+    solvedDate: string | null,
+    reviewDates?: Record<string, string>
+  ) => string[];
+  calculateOriginalSchedule: (solvedDate: string | null) => string[];
   filterCategory: string;
   filterDifficulty: string;
   showOnlyDueToday: boolean;

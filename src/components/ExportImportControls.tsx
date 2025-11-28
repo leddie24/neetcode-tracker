@@ -12,7 +12,7 @@ const ExportImportControls = ({
       2,
       "0"
     )}-${String(now.getDate()).padStart(2, "0")}`;
-    
+
     // Include problems with their notes in the export
     const exportContent = {
       progress,
@@ -23,7 +23,7 @@ const ExportImportControls = ({
       })),
       exportDate: dateStr,
     };
-    
+
     const dataStr = JSON.stringify(exportContent, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -40,7 +40,7 @@ const ExportImportControls = ({
       reader.onload = (e) => {
         try {
           const imported = JSON.parse(e.target?.result as string);
-          
+
           // Handle both old format (just progress) and new format (progress + problems)
           if (imported.progress && imported.problems) {
             // New format with notes
@@ -48,7 +48,9 @@ const ExportImportControls = ({
             // Update problems with imported notes
             imported.problems.forEach(
               (importedProblem: { id: number; notes?: string }) => {
-                const problem = problems.find((p) => p.id === importedProblem.id);
+                const problem = problems.find(
+                  (p) => p.id === importedProblem.id
+                );
                 if (problem && importedProblem.notes) {
                   problem.notes = importedProblem.notes;
                 }

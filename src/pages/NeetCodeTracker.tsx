@@ -45,15 +45,68 @@ const NeetCodeTracker = () => {
     "0"
   )}-${String(now.getDate()).padStart(2, "0")}`;
 
-  const calculateNextReviews = (solvedDate: string | null): string[] => {
+  const calculateNextReviews = (
+    solvedDate: string | null,
+    reviewDates?: Record<string, string>
+  ): string[] => {
     if (!solvedDate) return [];
-    const date = new Date(solvedDate + "T00:00:00");
-    return intervals.map((days) => {
-      const reviewDate = new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
-      return `${reviewDate.getFullYear()}-${String(
-        reviewDate.getMonth() + 1
-      ).padStart(2, "0")}-${String(reviewDate.getDate()).padStart(2, "0")}`;
-    });
+
+    const reviews: string[] = [];
+    let lastReviewShift = 0; // Track shift from the last completed review
+
+    // For each interval, calculate the review date
+    for (let i = 0; i < intervals.length; i++) {
+      // Always calculate from the original solve date to preserve the schedule
+      const date = new Date(solvedDate + "T00:00:00");
+      const scheduledDate = new Date(
+        date.getTime() + intervals[i] * 24 * 60 * 60 * 1000
+      );
+
+      // Check if this review was completed
+      const currentReviewKey = `review${i + 1}`;
+      if (reviewDates?.[currentReviewKey]) {
+        // This review was completed - calculate how many days early
+        const completedDate = new Date(
+          reviewDates[currentReviewKey] + "T00:00:00"
+        );
+        const daysEarly = Math.floor(
+          (scheduledDate.getTime() - completedDate.getTime()) /
+            (24 * 60 * 60 * 1000)
+        );
+        lastReviewShift = daysEarly;
+      }
+
+      // Apply the shift from the last completed review to all future reviews
+      const shiftedDate = new Date(
+        scheduledDate.getTime() - lastReviewShift * 24 * 60 * 60 * 1000
+      );
+      const reviewDateStr = `${shiftedDate.getFullYear()}-${String(
+        shiftedDate.getMonth() + 1
+      ).padStart(2, "0")}-${String(shiftedDate.getDate()).padStart(2, "0")}`;
+      reviews.push(reviewDateStr);
+    }
+
+    return reviews;
+  };
+
+  const calculateOriginalSchedule = (solvedDate: string | null): string[] => {
+    if (!solvedDate) return [];
+
+    const reviews: string[] = [];
+
+    // Calculate the original schedule without any shifts
+    for (let i = 0; i < intervals.length; i++) {
+      const date = new Date(solvedDate + "T00:00:00");
+      const scheduledDate = new Date(
+        date.getTime() + intervals[i] * 24 * 60 * 60 * 1000
+      );
+      const reviewDateStr = `${scheduledDate.getFullYear()}-${String(
+        scheduledDate.getMonth() + 1
+      ).padStart(2, "0")}-${String(scheduledDate.getDate()).padStart(2, "0")}`;
+      reviews.push(reviewDateStr);
+    }
+
+    return reviews;
   };
 
   const toggleComplete = (
@@ -68,7 +121,6 @@ const NeetCodeTracker = () => {
     setProgress((prev) => {
       const current: ProblemProgress = prev[problemId] || {
         solved: false,
-        reviews: Array(5).fill(false),
         dates: {},
       };
 
@@ -80,23 +132,25 @@ const NeetCodeTracker = () => {
             ...current,
             solved: newSolved,
             solvedDate: newSolved ? todayStr : null,
-            reviews: newSolved ? current.reviews : Array(5).fill(false),
             dates: newSolved ? { ...current.dates, initial: todayStr } : {},
           },
         };
       } else {
-        const newReviews = [...current.reviews];
-        newReviews[reviewIndex] = !newReviews[reviewIndex];
         const newDates = { ...current.dates };
         const reviewKey = `review${reviewIndex + 1}` as keyof typeof newDates;
-        if (newReviews[reviewIndex]) {
+        const isCompleted = newDates[reviewKey];
+
+        if (!isCompleted) {
+          // Mark as completed
           newDates[reviewKey] = todayStr;
         } else {
+          // Mark as uncompleted
           delete newDates[reviewKey];
         }
+
         return {
           ...prev,
-          [problemId]: { ...current, reviews: newReviews, dates: newDates },
+          [problemId]: { ...current, dates: newDates },
         };
       }
     });
@@ -126,10 +180,12 @@ const NeetCodeTracker = () => {
     return problems.filter((problem) => {
       const prob = progress[problem.id];
       if (!prob || !prob.solved) return false;
-      const nextReviews = calculateNextReviews(prob.solvedDate);
-      return nextReviews.some(
-        (date, idx) => !prob.reviews?.[idx] && date <= today
-      );
+      const nextReviews = calculateNextReviews(prob.solvedDate, prob.dates);
+      return nextReviews.some((date, idx) => {
+        const reviewKey = `review${idx + 1}` as const;
+        const isCompleted = prob.dates?.[reviewKey as keyof typeof prob.dates];
+        return !isCompleted && date <= today;
+      });
     }).length;
   };
 
@@ -261,6 +317,7 @@ const NeetCodeTracker = () => {
           progress={progress}
           toggleComplete={toggleComplete}
           calculateNextReviews={calculateNextReviews}
+          calculateOriginalSchedule={calculateOriginalSchedule}
           filterCategory={filterCategory}
           filterDifficulty={filterDifficulty}
           showOnlyDueToday={showOnlyDueToday}

@@ -1,4 +1,10 @@
-import { CheckCircle2, Circle, Calendar, ExternalLink, FileText } from "lucide-react";
+import {
+  CheckCircle2,
+  Circle,
+  Calendar,
+  ExternalLink,
+  FileText,
+} from "lucide-react";
 import { useState } from "react";
 import { ProblemTableProps, Problem } from "../types";
 import NotesModal from "./NotesModal";
@@ -14,6 +20,7 @@ const ProblemTable = ({
   progress,
   toggleComplete,
   calculateNextReviews,
+  calculateOriginalSchedule,
   filterCategory,
   filterDifficulty,
   showOnlyDueToday,
@@ -46,10 +53,12 @@ const ProblemTable = ({
 
     const prob = progress[problem.id];
     if (!prob || !prob.solved) return false;
-    const nextReviews = calculateNextReviews(prob.solvedDate);
-    const isDueToday = nextReviews.some(
-      (date, idx) => !prob.reviews?.[idx] && date <= today
-    );
+    const nextReviews = calculateNextReviews(prob.solvedDate, prob.dates);
+    const isDueToday = nextReviews.some((date, idx) => {
+      const reviewKey = `review${idx + 1}` as keyof typeof prob.dates;
+      const isCompleted = prob.dates?.[reviewKey];
+      return !isCompleted && date <= today;
+    });
     return categoryMatch && difficultyMatch && isDueToday;
   });
 
@@ -101,8 +110,15 @@ const ProblemTable = ({
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredProblems.map((problem) => {
-              const prob = progress[problem.id] || {};
-              const nextReviews = calculateNextReviews(prob.solvedDate);
+              const prob = progress[problem.id] || {
+                solved: false,
+                dates: {},
+              };
+              const nextReviews = calculateNextReviews(
+                prob.solvedDate,
+                prob.dates
+              );
+              const originalSchedule = calculateOriginalSchedule(prob.solvedDate);
               return (
                 <tr key={problem.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -179,7 +195,12 @@ const ProblemTable = ({
                     {prob.solved ? (
                       <div className="flex flex-wrap gap-2">
                         {nextReviews.map((date, idx) => {
-                          const isCompleted = prob.reviews?.[idx];
+                          const reviewKey = `review${
+                            idx + 1
+                          }` as keyof typeof prob.dates;
+                          const completedDate = prob.dates?.[reviewKey];
+                          const isCompleted = !!completedDate;
+                          const originalDate = originalSchedule[idx];
                           const overdue = !isCompleted && isOverdue(date);
                           const dueToday = !isCompleted && isDueToday(date);
 
@@ -199,25 +220,49 @@ const ProblemTable = ({
                                     ? "bg-yellow-100 text-yellow-700 border-yellow-300"
                                     : "bg-gray-100 text-gray-600 border-gray-300"
                                 }`}
-                                title={`Review ${idx + 1} - Due: ${formatDate(
-                                  date
-                                )}`}
+                                title={`Review ${idx + 1} - ${
+                                  isCompleted
+                                    ? `Completed: ${formatDate(
+                                        completedDate
+                                      )}, Next due: ${formatDate(date)}`
+                                    : `Originally due: ${formatDate(
+                                        originalDate
+                                      )}, Now due: ${formatDate(date)}`
+                                }`}
                               >
                                 {`R${idx + 1}`}
                               </button>
-                              <div
-                                className={`text-xs mt-1 flex items-center gap-1 ${
-                                  isCompleted
-                                    ? "text-green-600"
-                                    : overdue
-                                    ? "text-red-600"
-                                    : dueToday
-                                    ? "text-yellow-600"
-                                    : "text-gray-500"
-                                }`}
-                              >
-                                <Calendar size={10} />
-                                {formatDate(date)}
+                              <div className="text-xs mt-1 flex flex-col items-center gap-0.5">
+                                {isCompleted && (
+                                  <div className="text-gray-400 flex items-center gap-1">
+                                    <Calendar size={10} />
+                                    <span className="line-through">
+                                      {formatDate(originalDate)}
+                                    </span>
+                                  </div>
+                                )}
+                                {!isCompleted && originalDate !== date && (
+                                  <div className="text-gray-400 flex items-center gap-1">
+                                    <Calendar size={10} />
+                                    <span className="line-through">
+                                      {formatDate(originalDate)}
+                                    </span>
+                                  </div>
+                                )}
+                                <div
+                                  className={`flex items-center gap-1 ${
+                                    isCompleted
+                                      ? "text-gray-500"
+                                      : overdue
+                                      ? "text-red-600"
+                                      : dueToday
+                                      ? "text-yellow-600"
+                                      : "text-gray-500"
+                                  }`}
+                                >
+                                  <Calendar size={10} />
+                                  {formatDate(date)}
+                                </div>
                               </div>
                             </div>
                           );
