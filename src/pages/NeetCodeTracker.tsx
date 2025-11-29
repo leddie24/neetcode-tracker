@@ -242,9 +242,36 @@ const NeetCodeTracker = () => {
     ).length,
   };
 
+  const gfeStats = {
+    total: gfeProblems.length,
+    solved: Object.values(gfeProgress).filter((p) => p.solved).length,
+    easy: gfeProblems.filter(
+      (p) => p.difficulty === "Easy" && gfeProgress[p.id]?.solved
+    ).length,
+    medium: gfeProblems.filter(
+      (p) => p.difficulty === "Medium" && gfeProgress[p.id]?.solved
+    ).length,
+    hard: gfeProblems.filter(
+      (p) => p.difficulty === "Hard" && gfeProgress[p.id]?.solved
+    ).length,
+  };
+
   const getDueProblems = () => {
     return problems.filter((problem) => {
       const prob = progress[problem.id];
+      if (!prob || !prob.solved) return false;
+      const nextReviews = calculateNextReviews(prob.solvedDate, prob.dates);
+      return nextReviews.some((date, idx) => {
+        const reviewKey = `review${idx + 1}` as const;
+        const isCompleted = prob.dates?.[reviewKey as keyof typeof prob.dates];
+        return !isCompleted && date <= today;
+      });
+    }).length;
+  };
+
+  const getGfeDueProblems = () => {
+    return gfeProblems.filter((problem) => {
+      const prob = gfeProgress[problem.id];
       if (!prob || !prob.solved) return false;
       const nextReviews = calculateNextReviews(prob.solvedDate, prob.dates);
       return nextReviews.some((date, idx) => {
@@ -346,19 +373,43 @@ const NeetCodeTracker = () => {
         {/* Stats */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <StatsCard
-              color="blue"
-              value={`${stats.solved}/${stats.total}`}
-              label="Total Solved"
-            />
-            <StatsCard color="green" value={stats.easy} label="Easy" />
-            <StatsCard color="yellow" value={stats.medium} label="Medium" />
-            <StatsCard color="red" value={stats.hard} label="Hard" />
-            <StatsCard
-              color="purple"
-              value={getDueProblems()}
-              label="Due Today"
-            />
+            {activeTab === "neetcode" ? (
+              <>
+                <StatsCard
+                  color="blue"
+                  value={`${stats.solved}/${stats.total}`}
+                  label="Total Solved"
+                />
+                <StatsCard color="green" value={stats.easy} label="Easy" />
+                <StatsCard color="yellow" value={stats.medium} label="Medium" />
+                <StatsCard color="red" value={stats.hard} label="Hard" />
+                <StatsCard
+                  color="purple"
+                  value={getDueProblems()}
+                  label="Due Today"
+                />
+              </>
+            ) : (
+              <>
+                <StatsCard
+                  color="blue"
+                  value={`${gfeStats.solved}/${gfeStats.total}`}
+                  label="Total Solved"
+                />
+                <StatsCard color="green" value={gfeStats.easy} label="Easy" />
+                <StatsCard
+                  color="yellow"
+                  value={gfeStats.medium}
+                  label="Medium"
+                />
+                <StatsCard color="red" value={gfeStats.hard} label="Hard" />
+                <StatsCard
+                  color="purple"
+                  value={getGfeDueProblems()}
+                  label="Due Today"
+                />
+              </>
+            )}
           </div>
         </div>
 
