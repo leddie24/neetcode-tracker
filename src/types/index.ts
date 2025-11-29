@@ -4,7 +4,6 @@ export interface Problem {
   name: string;
   category: string;
   difficulty: "Easy" | "Medium" | "Hard";
-  day: number;
   url: string;
   leetcodeUrl?: string;
   notes?: string;
@@ -113,6 +112,8 @@ export interface ProblemTableProps {
 }
 
 export interface ExportImportControlsProps {
-  progress: ProgressState;
-  setProgress: (progress: ProgressState) => void;
+  neetcodeProgress: ProgressState;
+  setNeetcodeProgress: (progress: ProgressState) => void;
+  gfeProgress: ProgressState;
+  setGfeProgress: (progress: ProgressState) => void;
 }

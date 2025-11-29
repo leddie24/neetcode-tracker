@@ -1,10 +1,12 @@
 import { Download, Upload, Trash2 } from "lucide-react";
 import { ExportImportControlsProps } from "../types";
-import { problems } from "../data";
+import { problems, gfeProblems } from "../data";
 
 const ExportImportControls = ({
-  progress,
-  setProgress,
+  neetcodeProgress,
+  setNeetcodeProgress,
+  gfeProgress,
+  setGfeProgress,
 }: ExportImportControlsProps) => {
   const exportData = () => {
     const now = new Date();
@@ -15,8 +17,14 @@ const ExportImportControls = ({
 
     // Include problems with their notes in the export
     const exportContent = {
-      progress,
+      neetcodeProgress,
+      gfeProgress,
       problems: problems.map((p) => ({
+        id: p.id,
+        name: p.name,
+        notes: p.notes,
+      })),
+      gfeProblems: gfeProblems.map((p) => ({
         id: p.id,
         name: p.name,
         notes: p.notes,
@@ -29,7 +37,7 @@ const ExportImportControls = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `neetcode-progress-${dateStr}.json`;
+    link.download = `codetrack-progress-${dateStr}.json`;
     link.click();
   };
 
@@ -41,12 +49,11 @@ const ExportImportControls = ({
         try {
           const imported = JSON.parse(e.target?.result as string);
 
-          // Handle both old format (just progress) and new format (progress + problems)
-          if (imported.progress && imported.problems) {
-            // New format with notes
-            setProgress(imported.progress);
+          // Handle new format with both NeetCode and GFE progress
+          if (imported.neetcodeProgress) {
+            setNeetcodeProgress(imported.neetcodeProgress);
             // Update problems with imported notes
-            imported.problems.forEach(
+            imported.problems?.forEach(
               (importedProblem: { id: number; notes?: string }) => {
                 const problem = problems.find(
                   (p) => p.id === importedProblem.id
@@ -56,10 +63,28 @@ const ExportImportControls = ({
                 }
               }
             );
-          } else {
-            // Old format - just progress
-            setProgress(imported);
           }
+
+          if (imported.gfeProgress) {
+            setGfeProgress(imported.gfeProgress);
+            // Update GFE problems with imported notes
+            imported.gfeProblems?.forEach(
+              (importedProblem: { id: number; notes?: string }) => {
+                const problem = gfeProblems.find(
+                  (p) => p.id === importedProblem.id
+                );
+                if (problem && importedProblem.notes) {
+                  problem.notes = importedProblem.notes;
+                }
+              }
+            );
+          }
+
+          // Handle old format (just progress) for backward compatibility
+          if (imported.progress && !imported.neetcodeProgress) {
+            setNeetcodeProgress(imported.progress);
+          }
+
           alert("Progress imported successfully!");
         } catch {
           alert("Error importing file. Please check the file format.");
@@ -71,7 +96,8 @@ const ExportImportControls = ({
 
   const clearAllData = () => {
     if (window.confirm("Are you sure you want to clear all progress?")) {
-      setProgress({});
+      setNeetcodeProgress({});
+      setGfeProgress({});
     }
   };
 

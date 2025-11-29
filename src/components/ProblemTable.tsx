@@ -118,7 +118,9 @@ const ProblemTable = ({
                 prob.solvedDate,
                 prob.dates
               );
-              const originalSchedule = calculateOriginalSchedule(prob.solvedDate);
+              const originalSchedule = calculateOriginalSchedule(
+                prob.solvedDate
+              );
               return (
                 <tr key={problem.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -126,7 +128,7 @@ const ProblemTable = ({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     <div className="flex items-center gap-2">
-                      Neetcode:{" "}
+                      Link:{" "}
                       <a
                         href={problem.url}
                         target="_blank"

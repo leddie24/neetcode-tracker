@@ -6,7 +6,7 @@ import {
   ProblemTable,
   ExportImportControls,
 } from "../components";
-import { problems } from "../data";
+import { problems, gfeProblems } from "../data";
 import { ProgressState, ProblemProgress } from "../types";
 
 // --- Spaced repetition intervals ---
@@ -24,10 +24,21 @@ const NeetCodeTracker = () => {
     }
   });
 
+  const [gfeProgress, setGfeProgress] = useState<ProgressState>(() => {
+    try {
+      const savedProgress = localStorage.getItem("gfe-progress");
+      return savedProgress ? JSON.parse(savedProgress) : {};
+    } catch (error) {
+      console.error("Error loading GFE progress from localStorage:", error);
+      return {};
+    }
+  });
+
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterDifficulty, setFilterDifficulty] = useState("All");
   const [showOnlyDueToday, setShowOnlyDueToday] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [activeTab, setActiveTab] = useState<"neetcode" | "gfe">("neetcode");
 
   // Save progress to localStorage whenever it changes
   useEffect(() => {
@@ -37,6 +48,14 @@ const NeetCodeTracker = () => {
       console.error("Error saving progress to localStorage:", error);
     }
   }, [progress]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("gfe-progress", JSON.stringify(gfeProgress));
+    } catch (error) {
+      console.error("Error saving GFE progress to localStorage:", error);
+    }
+  }, [gfeProgress]);
 
   // --- Helpers ---
   const now = new Date();
@@ -119,6 +138,53 @@ const NeetCodeTracker = () => {
       now.getMonth() + 1
     ).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     setProgress((prev) => {
+      const current: ProblemProgress = prev[problemId] || {
+        solved: false,
+        dates: {},
+      };
+
+      if (reviewIndex === null) {
+        const newSolved = !current.solved;
+        return {
+          ...prev,
+          [problemId]: {
+            ...current,
+            solved: newSolved,
+            solvedDate: newSolved ? todayStr : null,
+            dates: newSolved ? { ...current.dates, initial: todayStr } : {},
+          },
+        };
+      } else {
+        const newDates = { ...current.dates };
+        const reviewKey = `review${reviewIndex + 1}` as keyof typeof newDates;
+        const isCompleted = newDates[reviewKey];
+
+        if (!isCompleted) {
+          // Mark as completed
+          newDates[reviewKey] = todayStr;
+        } else {
+          // Mark as uncompleted
+          delete newDates[reviewKey];
+        }
+
+        return {
+          ...prev,
+          [problemId]: { ...current, dates: newDates },
+        };
+      }
+    });
+  };
+
+  const toggleGfeComplete = (
+    problemId: number,
+    reviewIndex: number | null = null
+  ) => {
+    // Use local date instead of UTC to avoid timezone issues
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(
+      now.getMonth() + 1
+    ).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+    setGfeProgress((prev) => {
       const current: ProblemProgress = prev[problemId] || {
         solved: false,
         dates: {},
@@ -297,31 +363,95 @@ const NeetCodeTracker = () => {
         </div>
 
         {/* Export / Import / Clear */}
-        <ExportImportControls progress={progress} setProgress={setProgress} />
-
-        {/* Filters */}
-        <Filters
-          categories={categories}
-          difficulties={difficulties}
-          filterCategory={filterCategory}
-          setFilterCategory={setFilterCategory}
-          filterDifficulty={filterDifficulty}
-          setFilterDifficulty={setFilterDifficulty}
-          showOnlyDueToday={showOnlyDueToday}
-          setShowOnlyDueToday={setShowOnlyDueToday}
+        <ExportImportControls
+          neetcodeProgress={progress}
+          setNeetcodeProgress={setProgress}
+          gfeProgress={gfeProgress}
+          setGfeProgress={setGfeProgress}
         />
 
-        {/* Problems Table */}
-        <ProblemTable
-          problems={problems}
-          progress={progress}
-          toggleComplete={toggleComplete}
-          calculateNextReviews={calculateNextReviews}
-          calculateOriginalSchedule={calculateOriginalSchedule}
-          filterCategory={filterCategory}
-          filterDifficulty={filterDifficulty}
-          showOnlyDueToday={showOnlyDueToday}
-        />
+        {/* Tabs */}
+        <div className="flex gap-2 mb-6 border-b border-gray-200">
+          <button
+            onClick={() => setActiveTab("neetcode")}
+            className={`px-4 py-3 font-semibold transition-colors border-b-2 ${
+              activeTab === "neetcode"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-600 hover:text-gray-800"
+            }`}
+          >
+            NeetCode 150
+          </button>
+          <button
+            onClick={() => setActiveTab("gfe")}
+            className={`px-4 py-3 font-semibold transition-colors border-b-2 ${
+              activeTab === "gfe"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-600 hover:text-gray-800"
+            }`}
+          >
+            GreatFrontEnd 75
+          </button>
+        </div>
+
+        {activeTab === "neetcode" && (
+          <>
+            {/* Filters */}
+            <Filters
+              categories={categories}
+              difficulties={difficulties}
+              filterCategory={filterCategory}
+              setFilterCategory={setFilterCategory}
+              filterDifficulty={filterDifficulty}
+              setFilterDifficulty={setFilterDifficulty}
+              showOnlyDueToday={showOnlyDueToday}
+              setShowOnlyDueToday={setShowOnlyDueToday}
+            />
+
+            {/* Problems Table */}
+            <ProblemTable
+              problems={problems}
+              progress={progress}
+              toggleComplete={toggleComplete}
+              calculateNextReviews={calculateNextReviews}
+              calculateOriginalSchedule={calculateOriginalSchedule}
+              filterCategory={filterCategory}
+              filterDifficulty={filterDifficulty}
+              showOnlyDueToday={showOnlyDueToday}
+            />
+          </>
+        )}
+
+        {activeTab === "gfe" && (
+          <>
+            {/* Filters */}
+            <Filters
+              categories={[
+                "All",
+                ...Array.from(new Set(gfeProblems.map((p) => p.category))),
+              ]}
+              difficulties={difficulties}
+              filterCategory={filterCategory}
+              setFilterCategory={setFilterCategory}
+              filterDifficulty={filterDifficulty}
+              setFilterDifficulty={setFilterDifficulty}
+              showOnlyDueToday={showOnlyDueToday}
+              setShowOnlyDueToday={setShowOnlyDueToday}
+            />
+
+            {/* Problems Table */}
+            <ProblemTable
+              problems={gfeProblems}
+              progress={gfeProgress}
+              toggleComplete={toggleGfeComplete}
+              calculateNextReviews={calculateNextReviews}
+              calculateOriginalSchedule={calculateOriginalSchedule}
+              filterCategory={filterCategory}
+              filterDifficulty={filterDifficulty}
+              showOnlyDueToday={showOnlyDueToday}
+            />
+          </>
+        )}
       </div>
     </div>
   );

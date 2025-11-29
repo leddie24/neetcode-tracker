@@ -1,0 +1,753 @@
+[
+  {
+    "id": 1,
+    "name": "Debounce",
+    "description": "Implement a function to limit how many times a function can be executed by delaying the execution of the function until after a specified time after its last execution attempt",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/debounce",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 2,
+    "name": "Array.prototype.reduce",
+    "description": "Implement the Array.prototype.reduce() method",
+    "difficulty": "Easy",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/array-reduce",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 3,
+    "name": "Classnames",
+    "description": "Implement a function that conditionally joins CSS class names together",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/classnames",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 4,
+    "name": "Flatten",
+    "description": "Implement a function that recursively flattens an array into a single level deep",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/flatten",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 5,
+    "name": "Throttle",
+    "description": "Implement a function to control the execution of a function by limiting how many times it can execute over time",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/throttle",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 6,
+    "name": "Todo List",
+    "description": "Build a Todo list that lets users add new tasks and delete existing tasks",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/todo-list",
+    "category": "User interface coding"
+  },
+  {
+    "id": 7,
+    "name": "Contact Form",
+    "description": "Build a contact form which submits user feedback and contact details to a back end API",
+    "difficulty": "Easy",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/contact-form",
+    "category": "User interface coding"
+  },
+  {
+    "id": 8,
+    "name": "Holy Grail",
+    "description": "Build the famous holy grail layout consisting of a header, 3 columns, and a footer",
+    "difficulty": "Easy",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/holy-grail",
+    "category": "User interface coding"
+  },
+  {
+    "id": 9,
+    "name": "Tabs",
+    "description": "Build a tabs component that displays a list of tab elements and one associated panel of content at a time",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/tabs",
+    "category": "User interface coding"
+  },
+  {
+    "id": 10,
+    "name": "Job Board",
+    "description": "Build a job board that displays the latest job postings from Hacker News",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/job-board",
+    "category": "User interface coding"
+  },
+  {
+    "id": 11,
+    "name": "Accordion",
+    "description": "Build an accordion component that a displays a list of vertically stacked sections with each containing a title and content snippet",
+    "difficulty": "Easy",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/accordion",
+    "category": "User interface coding"
+  },
+  {
+    "id": 12,
+    "name": "News Feed (e.g. Facebook)",
+    "description": "Design a news feed user interface similar to Facebook and Twitter",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/system-design/news-feed-facebook",
+    "category": "System design"
+  },
+  {
+    "id": 13,
+    "name": "Autocomplete",
+    "description": "Design an autocomplete component seen on Google and Facebook search",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/system-design/autocomplete",
+    "category": "System design"
+  },
+  {
+    "id": 14,
+    "name": "Type Utilities II",
+    "description": "Implement utilities to determine non-primitive variable types in JavaScript",
+    "difficulty": "Easy",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/type-utilities-ii",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 15,
+    "name": "Promise.all",
+    "description": "Implement the Promise.all() function that resolves to an array of results if all the input elements are resolved or rejects otherwise",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/promise-all",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 16,
+    "name": "Data Merging",
+    "description": "Implement a function to merge rows of data from the same user",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/data-merging",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 17,
+    "name": "Deep Clone",
+    "description": "Implement a function that performs a deep copy of a value",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/deep-clone",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 18,
+    "name": "Event Emitter",
+    "description": "Implement a class that can subscribe to and emit events that trigger attached callback functions",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/event-emitter",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 19,
+    "name": "getElementsByStyle",
+    "description": "Implement a function to get all DOM elements that are rendered using the specified style",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/get-elements-by-style",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 20,
+    "name": "Function.prototype.call",
+    "description": "Implement the Function.prototype.call() function that calls the function with a given `this` value and provided arguments",
+    "difficulty": "Easy",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/function-call",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 21,
+    "name": "List Format",
+    "description": "Implement a function that formats a list of items into a single readable string",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/list-format",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 22,
+    "name": "Map Async Limit",
+    "description": "Implement a function that maps an array of items with an asynchronous mapping function while not exceeding the concurrency limit",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/map-async-limit",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 23,
+    "name": "Deep Equal",
+    "description": "Implement a function that determines if two values are equal",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/deep-equal",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 24,
+    "name": "Promise.any",
+    "description": "Implement the Promise.any() function that resolves when any of the input elements are resolved",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/promise-any",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 25,
+    "name": "Deep Omit",
+    "description": "Implement a function that removes specified keys and their corresponding values from an object, including nested objects or arrays",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/deep-omit",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 26,
+    "name": "Promisify",
+    "description": "Implement a function that takes a function following the common error-first callback style and returns a version that returns promises",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/promisify",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 27,
+    "name": "Memoize",
+    "description": "Implement a function that returns a memoized version of a function which accepts a single argument",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/memoize",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 28,
+    "name": "Squash Object",
+    "description": "Implement a function that returns a new object after squashing the input object into a single level of depth",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/squash-object",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 29,
+    "name": "getElementsByClassName",
+    "description": "Implement a function to get all DOM elements that contain the specified classes",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/get-elements-by-class-name",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 30,
+    "name": "Describe the difference between a cookie, `sessionStorage` and `localStorage` in browsers",
+    "description": "Web APIs",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/describe-the-difference-between-a-cookie-sessionstorage-and-localstorage",
+    "category": "Quiz"
+  },
+  {
+    "id": 31,
+    "name": "Describe the difference between `<script>`, `<script async>` and `<script defer>`",
+    "description": "HTML",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/describe-the-difference-between-script-async-and-script-defer",
+    "category": "Quiz"
+  },
+  {
+    "id": 32,
+    "name": "Explain the concept of \"hoisting\" in JavaScript",
+    "description": "JavaScript",
+    "difficulty": "Hard",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/explain-hoisting",
+    "category": "Quiz"
+  },
+  {
+    "id": 33,
+    "name": "What are the differences between JavaScript variables created using `let`, `var` or `const`?",
+    "description": "JavaScript",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/what-are-the-differences-between-variables-created-using-let-var-or-const",
+    "category": "Quiz"
+  },
+  {
+    "id": 34,
+    "name": "What is a closure in JavaScript, and how/why would you use one?",
+    "description": "Closure",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/what-is-a-closure-and-how-why-would-you-use-one",
+    "category": "Quiz"
+  },
+  {
+    "id": 35,
+    "name": "Describe event bubbling in JavaScript and browsers",
+    "description": "Web APIs",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/describe-event-bubbling",
+    "category": "Quiz"
+  },
+  {
+    "id": 36,
+    "name": "Explain event delegation in JavaScript",
+    "description": "Web APIs",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/explain-event-delegation",
+    "category": "Quiz"
+  },
+  {
+    "id": 37,
+    "name": "What's the difference between a JavaScript variable that is: `null`, `undefined` or undeclared?",
+    "description": "JavaScript",
+    "difficulty": "Easy",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/whats-the-difference-between-a-variable-that-is-null-undefined-or-undeclared-how-would-you-go-about-checking-for-any-of-these-states",
+    "category": "Quiz"
+  },
+  {
+    "id": 38,
+    "name": "Explain the differences between CommonJS modules and ES modules in JavaScript",
+    "description": "JavaScript",
+    "difficulty": "Hard",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/explain-the-differences-between-commonjs-modules-and-es-modules",
+    "category": "Quiz"
+  },
+  {
+    "id": 39,
+    "name": "What is the event loop in JavaScript runtimes?",
+    "description": "JavaScript",
+    "difficulty": "Hard",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/what-is-event-loop-what-is-the-difference-between-call-stack-and-task-queue",
+    "category": "Quiz"
+  },
+  {
+    "id": 40,
+    "name": "What are the pros and cons of using Promises instead of callbacks in JavaScript?",
+    "description": "Async",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/what-are-the-pros-and-cons-of-using-promises-instead-of-callbacks",
+    "category": "Quiz"
+  },
+  {
+    "id": 41,
+    "name": "Describe Block Formatting Context (BFC) and how it works.",
+    "description": "CSS",
+    "difficulty": "Hard",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/describe-block-formatting-context-bfc-and-how-it-works",
+    "category": "Quiz"
+  },
+  {
+    "id": 42,
+    "name": "Describe `z-index` and how stacking context is formed.",
+    "description": "CSS",
+    "difficulty": "Hard",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/describe-z-index-and-how-stacking-context-is-formed",
+    "category": "Quiz"
+  },
+  {
+    "id": 43,
+    "name": "Explain how a browser determines what elements match a CSS selector.",
+    "description": "Browser",
+    "difficulty": "Hard",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/explain-how-a-browser-determines-what-elements-match-a-css-selector",
+    "category": "Quiz"
+  },
+  {
+    "id": 44,
+    "name": "Explain your understanding of the box model and how you would tell the browser in CSS to render your layout in different box models.",
+    "description": "CSS",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/explain-your-understanding-of-the-box-model-and-how-you-would-tell-the-browser-in-css-to-render-your-layout-in-different-box-models",
+    "category": "Quiz"
+  },
+  {
+    "id": 45,
+    "name": "Is there any reason you'd want to use `translate()` instead of `absolute` positioning, or vice-versa? And why?",
+    "description": "CSS",
+    "difficulty": "Hard",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/is-there-any-reason-youd-want-to-use-translate-instead-of-absolute-positioning-or-vice-versa-and-why",
+    "category": "Quiz"
+  },
+  {
+    "id": 46,
+    "name": "What does `* { box-sizing: border-box; }` do?",
+    "description": "CSS",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/what-does-box-sizing-border-box-do-what-are-its-advantages",
+    "category": "Quiz"
+  },
+  {
+    "id": 47,
+    "name": "What is the CSS `display` property and can you give a few examples of its use?",
+    "description": "CSS",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/what-is-the-css-display-property-and-can-you-give-a-few-examples-of-its-use",
+    "category": "Quiz"
+  },
+  {
+    "id": 48,
+    "name": "What's the difference between a `relative`, `fixed`, `absolute`, `sticky` and `static`-ally positioned element?",
+    "description": "CSS",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/whats-the-difference-between-a-relative-fixed-absolute-and-statically-positioned-element",
+    "category": "Quiz"
+  },
+  {
+    "id": 49,
+    "name": "What kind of things must you be wary of when designing or developing for multilingual sites?",
+    "description": "HTML",
+    "difficulty": "Hard",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/designing-or-developing-for-multilingual-sites",
+    "category": "Quiz"
+  },
+  {
+    "id": 50,
+    "name": "What's the difference between `block`, `inline`, and `inline-block`?",
+    "description": "CSS",
+    "difficulty": "Easy",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/quiz/whats-the-difference-between-inline-and-inline-block",
+    "category": "Quiz"
+  },
+  {
+    "id": 51,
+    "name": "Curry",
+    "description": "Implement a function that transforms a function that takes multiple arguments into a function that can be repeatedly called with only one argument at a time",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/curry",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 52,
+    "name": "HTML Serializer",
+    "description": "Implement a function to serialize an object into an HTML string with indentation",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/html-serializer",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 53,
+    "name": "JSON.stringify",
+    "description": "Implement a function that converts a JavaScript value into a JSON string",
+    "difficulty": "Medium",
+    "languages": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/javascript/json-stringify",
+    "category": "JavaScript functions"
+  },
+  {
+    "id": 54,
+    "name": "Star Rating",
+    "description": "Build a star rating component that shows a row of star icons for users to select the number of filled stars corresponding to the rating",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/star-rating",
+    "category": "User interface coding"
+  },
+  {
+    "id": 55,
+    "name": "Image Carousel",
+    "description": "Build an image carousel that displays a sequence of images",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/image-carousel",
+    "category": "User interface coding"
+  },
+  {
+    "id": 56,
+    "name": "Progress Bars",
+    "description": "Build a list of progress bars that fill up gradually when they are added to the page",
+    "difficulty": "Easy",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/progress-bars",
+    "category": "User interface coding"
+  },
+  {
+    "id": 57,
+    "name": "Like Button",
+    "description": "Build a Like button that changes appearance based on the states",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/like-button",
+    "category": "User interface coding"
+  },
+  {
+    "id": 58,
+    "name": "Traffic Light",
+    "description": "Build a traffic light where the lights switch from green to yellow to red after predetermined intervals and loop indefinitely",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/traffic-light",
+    "category": "User interface coding"
+  },
+  {
+    "id": 59,
+    "name": "Digital Clock",
+    "description": "Build a 7-segment digital clock that shows the current time",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/digital-clock",
+    "category": "User interface coding"
+  },
+  {
+    "id": 60,
+    "name": "Stopwatch",
+    "description": "Build a stopwatch widget that can measure how much time has passed",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/stopwatch",
+    "category": "User interface coding"
+  },
+  {
+    "id": 61,
+    "name": "File Explorer",
+    "description": "Build a file explorer component to navigate files and directories in a tree-like hierarchical viewer",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/file-explorer",
+    "category": "User interface coding"
+  },
+  {
+    "id": 62,
+    "name": "Tic-tac-toe",
+    "description": "Build a tic-tac-toe game that is playable by two players",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/tic-tac-toe",
+    "category": "User interface coding"
+  },
+  {
+    "id": 63,
+    "name": "Transfer List",
+    "description": "Build a component that allows transferring of items between two lists",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/transfer-list",
+    "category": "User interface coding"
+  },
+  {
+    "id": 64,
+    "name": "Nested Checkboxes",
+    "description": "Build a nested checkboxes component with parent-child selection logic",
+    "difficulty": "Hard",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/nested-checkboxes",
+    "category": "User interface coding"
+  },
+  {
+    "id": 65,
+    "name": "Modal Dialog",
+    "description": "Build a reusable modal dialog component that can be opened and closed",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/modal-dialog",
+    "category": "User interface coding"
+  },
+  {
+    "id": 66,
+    "name": "Data Table",
+    "description": "Build a users data table with pagination features",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/data-table",
+    "category": "User interface coding"
+  },
+  {
+    "id": 67,
+    "name": "Undoable Counter",
+    "description": "Build a counter with a history of the values and ability to undo/redo actions",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/user-interface/undoable-counter",
+    "category": "User interface coding"
+  },
+  {
+    "id": 68,
+    "name": "Image Carousel",
+    "description": "Design a horizontally-scrolling image carousel component",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/system-design/image-carousel",
+    "category": "System design"
+  },
+  {
+    "id": 69,
+    "name": "Modal Dialog",
+    "description": "Design a modal/dialog component that shows a window overlaying the contents on the page",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/system-design/modal-dialog",
+    "category": "System design"
+  },
+  {
+    "id": 70,
+    "name": "Travel Booking (e.g. Airbnb)",
+    "description": "Design a travel booking website like Airbnb and Expedia",
+    "difficulty": "Medium",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/system-design/travel-booking-airbnb",
+    "category": "System design"
+  },
+  {
+    "id": 71,
+    "name": "Chat App (e.g. Messenger)",
+    "description": "Design a chat application like Messenger and Slack",
+    "difficulty": "Hard",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/system-design/chat-application-messenger",
+    "category": "System design"
+  },
+  {
+    "id": 72,
+    "name": "Video Streaming (e.g. Netflix)",
+    "description": "Design a video streaming application like Netflix and YouTube",
+    "difficulty": "Hard",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/system-design/video-streaming-netflix",
+    "category": "System design"
+  },
+  {
+    "id": 73,
+    "name": "Google Docs",
+    "description": "Design a collaborative editor like Google Docs and Notion",
+    "difficulty": "Hard",
+    "languages": [],
+    "url": "https://www.greatfrontend.com/interviews/study/gfe75/questions/system-design/collaborative-editor-google-docs",
+    "category": "System design"
+  }
+]
