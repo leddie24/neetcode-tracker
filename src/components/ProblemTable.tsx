@@ -4,6 +4,7 @@ import {
   Calendar,
   ExternalLink,
   FileText,
+  Link2,
 } from "lucide-react";
 import { useState } from "react";
 import { ProblemTableProps, Problem } from "../types";
@@ -24,6 +25,7 @@ const ProblemTable = ({
   filterCategory,
   filterDifficulty,
   showOnlyDueToday,
+  crossReferences,
 }: ProblemTableProps) => {
   const [notesModal, setNotesModal] = useState<{
     isOpen: boolean;
@@ -148,11 +150,42 @@ const ProblemTable = ({
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
-                          title={`Open ${problem.name} on NeetCode`}
+                          title={`Open ${problem.name} on LeetCode`}
                         >
                           {problem.name}
                           <ExternalLink size={14} className="flex-shrink-0" />
                         </a>
+                      </div>
+                    )}
+                    {/* Cross-reference indicators */}
+                    {crossReferences?.[problem.leetcodeUrl || ""] && (
+                      <div className="flex items-center gap-1 mt-1">
+                        <Link2 size={12} className="text-purple-500" />
+                        <span className="text-xs text-purple-600">
+                          Also in:{" "}
+                          {crossReferences[problem.leetcodeUrl || ""].map(
+                            (ref, i) => (
+                              <span key={ref.listName}>
+                                {i > 0 && ", "}
+                                <span
+                                  className={
+                                    ref.solved
+                                      ? "text-green-600 font-semibold"
+                                      : ""
+                                  }
+                                  title={
+                                    ref.solved
+                                      ? `Solved in ${ref.listName}`
+                                      : `Not solved in ${ref.listName}`
+                                  }
+                                >
+                                  {ref.listName}
+                                  {ref.solved && " ✓"}
+                                </span>
+                              </span>
+                            )
+                          )}
+                        </span>
                       </div>
                     )}
                   </td>

@@ -6,7 +6,7 @@ import {
   ProblemTable,
   ExportImportControls,
 } from "../components";
-import { problems, gfeProblems } from "../data";
+import { problems, gfeProblems, adobeProblems } from "../data";
 import { ProgressState, ProblemProgress } from "../types";
 
 // --- Spaced repetition intervals ---
@@ -34,11 +34,21 @@ const NeetCodeTracker = () => {
     }
   });
 
+  const [adobeProgress, setAdobeProgress] = useState<ProgressState>(() => {
+    try {
+      const savedProgress = localStorage.getItem("adobe-progress");
+      return savedProgress ? JSON.parse(savedProgress) : {};
+    } catch (error) {
+      console.error("Error loading Adobe progress from localStorage:", error);
+      return {};
+    }
+  });
+
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterDifficulty, setFilterDifficulty] = useState("All");
   const [showOnlyDueToday, setShowOnlyDueToday] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
-  const [activeTab, setActiveTab] = useState<"neetcode" | "gfe">("neetcode");
+  const [activeTab, setActiveTab] = useState<"neetcode" | "gfe" | "adobe">("neetcode");
 
   // Save progress to localStorage whenever it changes
   useEffect(() => {
@@ -56,6 +66,14 @@ const NeetCodeTracker = () => {
       console.error("Error saving GFE progress to localStorage:", error);
     }
   }, [gfeProgress]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("adobe-progress", JSON.stringify(adobeProgress));
+    } catch (error) {
+      console.error("Error saving Adobe progress to localStorage:", error);
+    }
+  }, [adobeProgress]);
 
   // --- Helpers ---
   const now = new Date();
@@ -222,6 +240,53 @@ const NeetCodeTracker = () => {
     });
   };
 
+  const toggleAdobeComplete = (
+    problemId: number,
+    reviewIndex: number | null = null
+  ) => {
+    // Use local date instead of UTC to avoid timezone issues
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(
+      now.getMonth() + 1
+    ).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+    setAdobeProgress((prev) => {
+      const current: ProblemProgress = prev[problemId] || {
+        solved: false,
+        dates: {},
+      };
+
+      if (reviewIndex === null) {
+        const newSolved = !current.solved;
+        return {
+          ...prev,
+          [problemId]: {
+            ...current,
+            solved: newSolved,
+            solvedDate: newSolved ? todayStr : null,
+            dates: newSolved ? { ...current.dates, initial: todayStr } : {},
+          },
+        };
+      } else {
+        const newDates = { ...current.dates };
+        const reviewKey = `review${reviewIndex + 1}` as keyof typeof newDates;
+        const isCompleted = newDates[reviewKey];
+
+        if (!isCompleted) {
+          // Mark as completed
+          newDates[reviewKey] = todayStr;
+        } else {
+          // Mark as uncompleted
+          delete newDates[reviewKey];
+        }
+
+        return {
+          ...prev,
+          [problemId]: { ...current, dates: newDates },
+        };
+      }
+    });
+  };
+
   const categories = [
     "All",
     ...Array.from(new Set(problems.map((p) => p.category))),
@@ -256,6 +321,67 @@ const NeetCodeTracker = () => {
     ).length,
   };
 
+  const adobeStats = {
+    total: adobeProblems.length,
+    solved: Object.values(adobeProgress).filter((p) => p.solved).length,
+    easy: adobeProblems.filter(
+      (p) => p.difficulty === "Easy" && adobeProgress[p.id]?.solved
+    ).length,
+    medium: adobeProblems.filter(
+      (p) => p.difficulty === "Medium" && adobeProgress[p.id]?.solved
+    ).length,
+    hard: adobeProblems.filter(
+      (p) => p.difficulty === "Hard" && adobeProgress[p.id]?.solved
+    ).length,
+  };
+
+  // Build cross-references for shared problems between lists
+  const buildCrossReferences = (
+    currentList: "neetcode" | "gfe" | "adobe"
+  ): Record<string, { listName: string; solved: boolean }[]> => {
+    const refs: Record<string, { listName: string; solved: boolean }[]> = {};
+
+    const lists = [
+      {
+        name: "NeetCode 150",
+        key: "neetcode" as const,
+        problems: problems,
+        progress: progress,
+      },
+      {
+        name: "GFE 75",
+        key: "gfe" as const,
+        problems: gfeProblems,
+        progress: gfeProgress,
+      },
+      {
+        name: "Adobe Tagged",
+        key: "adobe" as const,
+        problems: adobeProblems,
+        progress: adobeProgress,
+      },
+    ];
+
+    // For each problem with a leetcodeUrl, check if it exists in other lists
+    lists
+      .filter((l) => l.key !== currentList)
+      .forEach((otherList) => {
+        otherList.problems.forEach((prob) => {
+          if (prob.leetcodeUrl) {
+            if (!refs[prob.leetcodeUrl]) {
+              refs[prob.leetcodeUrl] = [];
+            }
+            refs[prob.leetcodeUrl].push({
+              listName: otherList.name,
+              solved: !!otherList.progress[prob.id]?.solved,
+            });
+          }
+        });
+      });
+
+    return refs;
+  };
+
   const getDueProblems = () => {
     return problems.filter((problem) => {
       const prob = progress[problem.id];
@@ -272,6 +398,19 @@ const NeetCodeTracker = () => {
   const getGfeDueProblems = () => {
     return gfeProblems.filter((problem) => {
       const prob = gfeProgress[problem.id];
+      if (!prob || !prob.solved) return false;
+      const nextReviews = calculateNextReviews(prob.solvedDate, prob.dates);
+      return nextReviews.some((date, idx) => {
+        const reviewKey = `review${idx + 1}` as const;
+        const isCompleted = prob.dates?.[reviewKey as keyof typeof prob.dates];
+        return !isCompleted && date <= today;
+      });
+    }).length;
+  };
+
+  const getAdobeDueProblems = () => {
+    return adobeProblems.filter((problem) => {
+      const prob = adobeProgress[problem.id];
       if (!prob || !prob.solved) return false;
       const nextReviews = calculateNextReviews(prob.solvedDate, prob.dates);
       return nextReviews.some((date, idx) => {
@@ -389,7 +528,7 @@ const NeetCodeTracker = () => {
                   label="Due Today"
                 />
               </>
-            ) : (
+            ) : activeTab === "gfe" ? (
               <>
                 <StatsCard
                   color="blue"
@@ -409,7 +548,27 @@ const NeetCodeTracker = () => {
                   label="Due Today"
                 />
               </>
-            )}
+            ) : activeTab === "adobe" ? (
+              <>
+                <StatsCard
+                  color="blue"
+                  value={`${adobeStats.solved}/${adobeStats.total}`}
+                  label="Total Solved"
+                />
+                <StatsCard color="green" value={adobeStats.easy} label="Easy" />
+                <StatsCard
+                  color="yellow"
+                  value={adobeStats.medium}
+                  label="Medium"
+                />
+                <StatsCard color="red" value={adobeStats.hard} label="Hard" />
+                <StatsCard
+                  color="purple"
+                  value={getAdobeDueProblems()}
+                  label="Due Today"
+                />
+              </>
+            ) : null}
           </div>
         </div>
 
@@ -419,6 +578,8 @@ const NeetCodeTracker = () => {
           setNeetcodeProgress={setProgress}
           gfeProgress={gfeProgress}
           setGfeProgress={setGfeProgress}
+          adobeProgress={adobeProgress}
+          setAdobeProgress={setAdobeProgress}
         />
 
         {/* Tabs */}
@@ -442,6 +603,16 @@ const NeetCodeTracker = () => {
             }`}
           >
             GreatFrontEnd 75
+          </button>
+          <button
+            onClick={() => setActiveTab("adobe")}
+            className={`px-4 py-3 font-semibold transition-colors border-b-2 ${
+              activeTab === "adobe"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-600 hover:text-gray-800"
+            }`}
+          >
+            Adobe Tagged (55)
           </button>
         </div>
 
@@ -469,6 +640,7 @@ const NeetCodeTracker = () => {
               filterCategory={filterCategory}
               filterDifficulty={filterDifficulty}
               showOnlyDueToday={showOnlyDueToday}
+              crossReferences={buildCrossReferences("neetcode")}
             />
           </>
         )}
@@ -500,6 +672,39 @@ const NeetCodeTracker = () => {
               filterCategory={filterCategory}
               filterDifficulty={filterDifficulty}
               showOnlyDueToday={showOnlyDueToday}
+              crossReferences={buildCrossReferences("gfe")}
+            />
+          </>
+        )}
+
+        {activeTab === "adobe" && (
+          <>
+            {/* Filters */}
+            <Filters
+              categories={[
+                "All",
+                ...Array.from(new Set(adobeProblems.map((p) => p.category))),
+              ]}
+              difficulties={difficulties}
+              filterCategory={filterCategory}
+              setFilterCategory={setFilterCategory}
+              filterDifficulty={filterDifficulty}
+              setFilterDifficulty={setFilterDifficulty}
+              showOnlyDueToday={showOnlyDueToday}
+              setShowOnlyDueToday={setShowOnlyDueToday}
+            />
+
+            {/* Problems Table */}
+            <ProblemTable
+              problems={adobeProblems}
+              progress={adobeProgress}
+              toggleComplete={toggleAdobeComplete}
+              calculateNextReviews={calculateNextReviews}
+              calculateOriginalSchedule={calculateOriginalSchedule}
+              filterCategory={filterCategory}
+              filterDifficulty={filterDifficulty}
+              showOnlyDueToday={showOnlyDueToday}
+              crossReferences={buildCrossReferences("adobe")}
             />
           </>
         )}

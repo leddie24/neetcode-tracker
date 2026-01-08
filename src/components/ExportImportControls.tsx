@@ -1,12 +1,14 @@
 import { Download, Upload, Trash2 } from "lucide-react";
 import { ExportImportControlsProps } from "../types";
-import { problems, gfeProblems } from "../data";
+import { problems, gfeProblems, adobeProblems } from "../data";
 
 const ExportImportControls = ({
   neetcodeProgress,
   setNeetcodeProgress,
   gfeProgress,
   setGfeProgress,
+  adobeProgress,
+  setAdobeProgress,
 }: ExportImportControlsProps) => {
   const exportData = () => {
     const now = new Date();
@@ -19,12 +21,18 @@ const ExportImportControls = ({
     const exportContent = {
       neetcodeProgress,
       gfeProgress,
+      adobeProgress,
       problems: problems.map((p) => ({
         id: p.id,
         name: p.name,
         notes: p.notes,
       })),
       gfeProblems: gfeProblems.map((p) => ({
+        id: p.id,
+        name: p.name,
+        notes: p.notes,
+      })),
+      adobeProblems: adobeProblems.map((p) => ({
         id: p.id,
         name: p.name,
         notes: p.notes,
@@ -80,6 +88,21 @@ const ExportImportControls = ({
             );
           }
 
+          if (imported.adobeProgress) {
+            setAdobeProgress(imported.adobeProgress);
+            // Update Adobe problems with imported notes
+            imported.adobeProblems?.forEach(
+              (importedProblem: { id: number; notes?: string }) => {
+                const problem = adobeProblems.find(
+                  (p) => p.id === importedProblem.id
+                );
+                if (problem && importedProblem.notes) {
+                  problem.notes = importedProblem.notes;
+                }
+              }
+            );
+          }
+
           // Handle old format (just progress) for backward compatibility
           if (imported.progress && !imported.neetcodeProgress) {
             setNeetcodeProgress(imported.progress);
@@ -98,6 +121,7 @@ const ExportImportControls = ({
     if (window.confirm("Are you sure you want to clear all progress?")) {
       setNeetcodeProgress({});
       setGfeProgress({});
+      setAdobeProgress({});
     }
   };
 

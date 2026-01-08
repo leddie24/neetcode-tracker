@@ -97,6 +97,11 @@ export interface FiltersProps {
   setShowOnlyDueToday: (show: boolean) => void;
 }
 
+export interface CrossReference {
+  listName: string;
+  solved: boolean;
+}
+
 export interface ProblemTableProps {
   problems: Problem[];
   progress: ProgressState;
@@ -109,6 +114,7 @@ export interface ProblemTableProps {
   filterCategory: string;
   filterDifficulty: string;
   showOnlyDueToday: boolean;
+  crossReferences?: Record<string, CrossReference[]>;
 }
 
 export interface ExportImportControlsProps {
@@ -116,4 +122,6 @@ export interface ExportImportControlsProps {
   setNeetcodeProgress: (progress: ProgressState) => void;
   gfeProgress: ProgressState;
   setGfeProgress: (progress: ProgressState) => void;
+  adobeProgress: ProgressState;
+  setAdobeProgress: (progress: ProgressState) => void;
 }
